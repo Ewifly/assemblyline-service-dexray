@@ -1,0 +1,24 @@
+name: Dexray
+version: $SERVICE_TAG
+description: >
+  Quarantined file extractor
+accepts: .*
+rejects: empty|metadata/.*
+
+stage: EXTRACT
+category: Extraction
+
+file_required: true
+# Maximum execution time the service has before it's considered to be timed out
+timeout: 120
+disable_cache: false
+
+# is the service enabled by default
+enabled: true
+is_external: false
+
+docker_config:
+  image: ewifly/assemblyline-service-dexray:$SERVICE_TAG
+  cpu_cores: 1.0
+  ram_mb: 512
+  allow_internet_access: false
