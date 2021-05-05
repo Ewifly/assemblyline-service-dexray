@@ -17,7 +17,7 @@ class Dexray(ServiceBase):
         result = Result()
         text_section = ResultSection('DexRay logs :')
 
-        my_cmd = "perl dexray.pl" + request.file_path
+        my_cmd = "perl dexray/dexray.pl " + request.file_path
         my_cmd_output = os.popen(my_cmd)
         if my_cmd_output:
             for line in my_cmd_output:
@@ -25,6 +25,6 @@ class Dexray(ServiceBase):
 
             for path in Path(request.file_path).glob(request.file_name + ".*"):
                 request.add_extracted(request.file_path, path, str, Result, request)
-        
+                print("salut le web")
         request.result = result
         
