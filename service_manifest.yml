@@ -21,4 +21,3 @@ docker_config:
   image: ewifly/assemblyline-service-dexray:$SERVICE_TAG
   cpu_cores: 1.0
   ram_mb: 512
-  allow_internet_access: false
