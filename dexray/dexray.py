@@ -1,5 +1,7 @@
-import os, string
+import os, string, tempfile, glob
 from pathlib import Path
+from os import listdir
+from os.path import isfile, join
 
 from assemblyline.common.str_utils import safe_str
 from assemblyline_v4_service.common.base import ServiceBase
@@ -22,9 +24,19 @@ class Dexray(ServiceBase):
         if my_cmd_output:
             for line in my_cmd_output:
                 text_section.add_line(line.rstrip())
+            result.add_section(text_section)
+            self.log.info(f"command success")
 
-            for path in Path(request.file_path).glob(request.file_name + ".*"):
-                request.add_extracted(request.file_path, path, str, Result, request)
-                print("salut le web")
+            self.log.info(f"workingdir = {self.working_directory}")
+            self.log.info(f"filename = {request.file_name}")
+            
+            path = request.file_path
+            newfile_path = glob.glob(request.file_path+".*")[0]
+            self.log.info(f"newfile path = {newfile_path}")
+            newfile_name = newfile_path.split("/")[-1]
+            self.log.info(f"newfile_name = {newfile_name}")
+            request.add_extracted(path, newfile_name, "resubmit")
+            self.log.info(f"file resubmitted")
+
         request.result = result
         

@@ -5,7 +5,7 @@ description: >
 accepts: .*
 rejects: empty|metadata/.*
 
-stage: CORE
+stage: EXTRACT
 category: Extraction
 
 file_required: true
@@ -15,7 +15,7 @@ disable_cache: false
 
 # is the service enabled by default
 enabled: true
-is_external: true
+is_external: false
 
 docker_config:
   image: ewifly/assemblyline-service-dexray:$SERVICE_TAG
