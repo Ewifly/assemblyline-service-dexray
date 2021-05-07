@@ -31,12 +31,15 @@ class Dexray(ServiceBase):
             self.log.info(f"filename = {request.file_name}")
             
             path = request.file_path
-            newfile_path = glob.glob(request.file_path+".*")[0]
-            self.log.info(f"newfile path = {newfile_path}")
-            newfile_name = newfile_path.split("/")[-1]
-            self.log.info(f"newfile_name = {newfile_name}")
-            request.add_extracted(path, newfile_name, "resubmit")
-            self.log.info(f"file resubmitted")
+            self.log.info(f"path = {path}")
+            lnewfile_path = glob.glob(path + ".*")
+            self.log.info(f"newfile path = {lnewfile_path}")
+            if lnewfile_path:
+                newfile_path = lnewfile_path[0]
+                newfile_name = newfile_path.split("/")[-1]
+                self.log.info(f"newfile_name = {newfile_name}")
+                request.add_extracted(path, newfile_name, "resubmit")
+                self.log.info(f"file resubmitted")
 
         request.result = result
         
