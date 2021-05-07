@@ -22,6 +22,7 @@ class Dexray(ServiceBase):
 
         my_cmd = "perl dexray/dexray.pl " + request.file_path
         my_cmd_output = os.popen(my_cmd)
+        text_section.add_line("aftr cmd")
         if my_cmd_output:
             text_section.add_line("command success")
             self.log.info(f"command success")
