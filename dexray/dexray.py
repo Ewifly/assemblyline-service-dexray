@@ -27,10 +27,11 @@ class Dexray(ServiceBase):
         self.log.info(f"file = {file}")
         result = Result()
         text_section = ResultSection('DexRay logs :')
+        text_section.add_line("after cmd")
         # my_cmd = "perl" + os.getcwd() + "dexray/dexray.pl " + request.file_path
         unquar = Popen(["perl", self.dexraytool, file])
         _ = unquar.communicate()
-        text_section.add_line("aftr cmd")
+        text_section.add_line("after cmd")
         text_section.add_line("command success")
         self.log.info(f"command success")
 
