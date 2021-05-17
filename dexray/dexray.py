@@ -19,16 +19,15 @@ class Dexray(ServiceBase):
     def execute(self, request):
         self.log.info(f"tool path = {self.dexraytool}")
         file = request.file_path
-        assert(file)
         cwd = self.working_directory
-        assert(cwd)
         filename = request.file_name
-        assert(filename)
         self.log.info(f"file = {file}")
         result = Result()
         text_section = ResultSection('DexRay logs :')
         text_section.add_line("after cmd")
         # my_cmd = "perl" + os.getcwd() + "dexray/dexray.pl " + request.file_path
+
+
         unquar = Popen(["perl", self.dexraytool, file])
         _ = unquar.communicate()
         text_section.add_line("after cmd")
