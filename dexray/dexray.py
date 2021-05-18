@@ -24,44 +24,28 @@ class Dexray(ServiceBase):
         self.log.info(f"file = {file}")
         result = Result()
         text_section = ResultSection('DexRay logs :')
-        text_section.add_line("after cmd")
         # my_cmd = "perl" + os.getcwd() + "dexray/dexray.pl " + request.file_path
 
 
         unquar = Popen(["perl", self.dexraytool, file])
         unquar.wait()
-        text_section.add_line("after cmd")
-        text_section.add_line("command success")
         self.log.info(f"command success")
 
         self.log.info(f"workingdir = {cwd}")
-        text_section.add_line(f"workingdir = {cwd}")
         self.log.info(f"filename = {filename}")
-        text_section.add_line(f"file name = {filename}")
 
         lnewfile_path = glob.glob(cwd + filename + ".*")
         self.log.info(f"newfile path = {lnewfile_path}")
-        if lnewfile_path:
-            text_section.add_line("in cwd")
-            text_section.add_line()
-            newfile_path = lnewfile_path[0]
-            newfile_name = os.path.basename(newfile_path)
-            self.log.info(f"newfile_name = {newfile_name}")
-            request.add_extracted(cwd, newfile_name, "resubmit")
-            text_section.add_line(f"file resubmitted as: {newfile_name}")
-            self.log.info(f"file resubmitted")
         path = request.file_path
-        self.log.info(f"path = {path}")
         lnewfile_path = glob.glob(path + ".*")
         self.log.info(f"newfile path = {lnewfile_path}")
         if lnewfile_path:
-            text_section.add_line("in filepath")
             newfile_path = lnewfile_path[0]
             newfile_name = os.path.basename(newfile_path)
             self.log.info(f"newfile_name = {newfile_name}")
             request.add_extracted(path, newfile_name, "resubmit")
             text_section.add_line(f"file resubmitted as: {newfile_name}")
             self.log.info(f"file resubmitted")
-
+            result.add_section(text_section)
         request.result = result
         
