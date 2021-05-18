@@ -34,8 +34,6 @@ class Dexray(ServiceBase):
         self.log.info(f"workingdir = {cwd}")
         self.log.info(f"filename = {filename}")
 
-        lnewfile_path = glob.glob(cwd + filename + ".*")
-        self.log.info(f"newfile path = {lnewfile_path}")
         path = request.file_path
         lnewfile_path = glob.glob(path + ".*")
         self.log.info(f"newfile path = {lnewfile_path}")
@@ -44,6 +42,7 @@ class Dexray(ServiceBase):
             newfile_name = os.path.basename(newfile_path)
             self.log.info(f"newfile_name = {newfile_name}")
             request.add_extracted(path, newfile_name, "resubmit")
+            request.add_supplementary(path, newfile_name, "extracted file")
             text_section.add_line(f"file resubmitted as: {newfile_name}")
             self.log.info(f"file resubmitted")
             result.add_section(text_section)
