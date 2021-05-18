@@ -24,9 +24,6 @@ class Dexray(ServiceBase):
         self.log.info(f"file = {file}")
         result = Result()
         text_section = ResultSection('DexRay logs :')
-        # my_cmd = "perl" + os.getcwd() + "dexray/dexray.pl " + request.file_path
-
-        print(os.getcwd())
         unquar = Popen(["perl", self.dexraytool, file])
         unquar.wait()
         self.log.info(f"command success")
@@ -35,7 +32,7 @@ class Dexray(ServiceBase):
         self.log.info(f"filename = {filename}")
 
         path = request.file_path
-        lnewfile_path = glob.glob(path + ".*")
+        lnewfile_path = glob.glob(path + ".*") #should find the newly created file (filename.<offset>_<AV Name>.out)
         self.log.info(f"newfile path = {lnewfile_path}")
         if lnewfile_path:
             newfile_path = lnewfile_path[0]
