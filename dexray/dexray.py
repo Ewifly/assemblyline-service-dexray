@@ -1,4 +1,4 @@
-import os, string, tempfile, glob
+import os, string, tempfile, glob, sys
 from pathlib import Path
 from os import listdir
 from os.path import isfile, join
@@ -29,7 +29,7 @@ class Dexray(ServiceBase):
 
 
         unquar = Popen(["perl", self.dexraytool, file])
-        _ = unquar.communicate()
+        unquar.wait()
         text_section.add_line("after cmd")
         text_section.add_line("command success")
         self.log.info(f"command success")
