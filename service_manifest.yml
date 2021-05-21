@@ -2,7 +2,7 @@ name: Dexray
 version: $SERVICE_TAG
 description: >
   Quarantined file extractor
-accepts: .*
+accepts: unknown
 rejects: empty|metadata/.*
 
 stage: EXTRACT
