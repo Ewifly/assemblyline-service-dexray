@@ -44,7 +44,7 @@ class Dexray(ServiceBase):
         if metadata:
             # Can contain live URLs to the original content source
             kv_section = ResultSection("DeXRAY Quarantine Metadata",
-                                       body_format=BODY_FORMAT.KEY_VALUE,
+                                       body_format=BODY_FORMAT.JSON,
                                        body=json.dumps(metadata))
             result.add_section(kv_section)
 
