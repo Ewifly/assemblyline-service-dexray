@@ -7,6 +7,7 @@
 
 import configparser
 import struct
+import re
 from datetime import datetime, timedelta, timezone
 from itertools import cycle
 from pathlib import Path
@@ -481,7 +482,7 @@ def extract_defender(local: str, sha: str, output_path: str, encoding: str):
     with open(local, "rb") as fh:
         file_data = fh.read()
         out_file = output_path.joinpath("{0}_Defender.out".format(sha))
-        # TODO - Get metadata from header and footer, which may include file names and source URLs
+        # Get metadata like file names, registry keys, and task schedule
         if file_data.startswith(b"\xDB\xE8\xC5\x01"):
             rc4 = ARC4.new(key=rc4_key)
             header = rc4.decrypt(file_data[:header_len])
@@ -490,9 +491,35 @@ def extract_defender(local: str, sha: str, output_path: str, encoding: str):
 
             rc4 = ARC4.new(key=rc4_key)
             decrypt_1 = rc4.decrypt(file_data[header_len:data_end_1])
+            detection_name = decrypt_1[0x34:].rstrip(b"\x00").decode("utf-8")
+            if detection_name:
+                metadata["detection"] = detection_name
 
             rc4 = ARC4.new(key=rc4_key)
             decrypt_2 = rc4.decrypt(file_data[data_end_1:data_end_2])
+
+            m = None
+            for m in re.finditer(rb"(?P<ucs2_val>.*?)(?P<data_type>[a-z]{4,})\x00+(?:\x14|$)", decrypt_2):
+                data_type = m.group("data_type").rstrip(b"\x00").decode("ascii")
+                if data_type not in metadata:
+                    metadata[data_type] = []
+                ucs2_val = m.group("ucs2_val")
+                metadata[data_type].extend(
+                    re.findall(r"((?:HK[A-Za-z]+\\|[A-Za-z]:)[^\x00]+)",
+                               ucs2_val.decode("utf-16-le", errors="ignore"))
+                )
+                metadata[data_type].extend(
+                    re.findall(r"((?:HK[A-Za-z]+\\|[A-Za-z]:)[^\x00]+)",
+                               (b"\x00" + ucs2_val).decode("utf-16-le", errors="ignore"))
+                )
+
+            if m is None:
+                metadata["string_search"] = re.findall(r"([A-Za-z0-9:/\\]{3}[^\x00]+)",
+                                                       decrypt_2.decode("utf-16-le", errors="ignore"))
+                metadata["string_search"].extend(
+                    re.findall(r"([A-Za-z0-9:/\\]{3}[^\x00]+)",
+                               (b"\x00" + decrypt_2).decode("utf-16-le", errors="ignore"))
+                )
 
             decrypted_data = header + decrypt_1 + decrypt_2
             with open(out_file, "wb") as oh:
@@ -505,7 +532,6 @@ def extract_defender(local: str, sha: str, output_path: str, encoding: str):
             orig_len = struct.unpack("<I", decrypt_all[header_len-12:header_len-8])[0]
             decrypted_data = decrypt_all[header_len:header_len + orig_len]
             header_data = decrypt_all[:header_len]
-            print(header_data)
             trailer_data = decrypt_all[header_len + orig_len:]
             if trailer_data:
                 zone_data = "Zone.Identifier:$DATA".encode("utf-16le")
