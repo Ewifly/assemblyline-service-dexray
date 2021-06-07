@@ -1,12 +1,14 @@
+
 import json
 
-from assemblyline.common.str_utils import safe_str
 from assemblyline_v4_service.common.base import ServiceBase
+
 from assemblyline_v4_service.common.request import ServiceRequest
 from assemblyline_v4_service.common.result import Result, ResultSection, BODY_FORMAT
 from assemblyline_v4_service.common.task import MaxExtractedExceeded
 
 from dexray_lib import extract_ahnlab, extract_avast_avg, extract_mcafee_bup, extract_defender
+
 
 
 class Dexray(ServiceBase):
@@ -21,7 +23,8 @@ class Dexray(ServiceBase):
         self.sha = None
 
     def start(self):
-        self.log.info(f"start() from {self.service_attributes.name} service called")
+        if not os.path.exists(self.dexraytool):
+            self.log.error(f"Could not find dexray perl script at: {self.dexraytool}")
 
     def execute(self, request):
         """Main Module. See README for details."""
@@ -85,3 +88,4 @@ class Dexray(ServiceBase):
                                            "None of the files were extracted.")
 
         return metadata
+**
