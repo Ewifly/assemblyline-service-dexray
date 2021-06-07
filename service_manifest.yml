@@ -2,14 +2,11 @@ name: Dexray
 version: $SERVICE_TAG
 description: >
   Quarantined file extractor
-accepts: unknown
+accepts: quarantine/.*
 rejects: empty|metadata/.*
 
 stage: EXTRACT
 category: Extraction
-
-config:
-  dexray_tool_path: /opt/al_support/dexray.pl
 
 file_required: true
 # Maximum execution time the service has before it's considered to be timed out

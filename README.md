@@ -1,2 +1,4 @@
-Assemblyline service : 
-dequarantinize files before resubmitting them to the system using Dexray (http://hexacorn.com/d/DeXRAY.pl) (a little bit modified for IO)
+#DeXRAY Assemblyline v4 Service 
+Extract files from quarantined files and resubmit using partial Python3 DeXRAY port.
+
+http://hexacorn.com/d/DeXRAY.pl
