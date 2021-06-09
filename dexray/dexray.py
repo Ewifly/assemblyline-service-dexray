@@ -7,9 +7,7 @@ from assemblyline_v4_service.common.request import ServiceRequest
 from assemblyline_v4_service.common.result import Result, ResultSection, BODY_FORMAT
 from assemblyline_v4_service.common.task import MaxExtractedExceeded
 
-from dexray_lib import extract_ahnlab, extract_avast_avg, extract_mcafee_bup, extract_defender
-
-
+from .dexray_lib import extract_ahnlab, extract_avast_avg, extract_mcafee_bup, extract_defender
 
 class Dexray(ServiceBase):
     def __init__(self, config=None):
@@ -87,4 +85,3 @@ class Dexray(ServiceBase):
                                            "None of the files were extracted.")
 
         return metadata
-**
