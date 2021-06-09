@@ -23,8 +23,7 @@ class Dexray(ServiceBase):
         self.sha = None
 
     def start(self):
-        if not os.path.exists(self.dexraytool):
-            self.log.error(f"Could not find dexray perl script at: {self.dexraytool}")
+        self.log.info(f"start() from {self.service_attributes.name} service called")
 
     def execute(self, request):
         """Main Module. See README for details."""
