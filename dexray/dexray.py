@@ -1,6 +1,7 @@
 
 import json
 
+from assemblyline.common.str_utils import safe_str
 from assemblyline_v4_service.common.base import ServiceBase
 
 from assemblyline_v4_service.common.request import ServiceRequest
